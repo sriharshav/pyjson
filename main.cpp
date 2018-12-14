@@ -140,9 +140,8 @@ PYBIND11_MODULE(pyjson, m) {
                 {"currency", "USD"},
                 {"value", 42.99}
             }}
-            py::object out = j;
-            return out;
         };
-        return j;
+        py::object out = j;
+        return out;
     }, "returns a dummy json object");
 }
