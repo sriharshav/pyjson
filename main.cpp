@@ -108,15 +108,19 @@ namespace nlohmann
         }
     }
 
-    py::object adl_serializer<py::object>::from_json(const json& j)
+    template <>
+    struct adl_serializer<py::object>
     {
-        return detail::from_json_impl(j);
-    }
+        static py::object from_json(const json& j)
+        {
+            return detail::from_json_impl(j);
+        }
 
-    void adl_serializer<py::object>::to_json(json& j, py::object obj)
-    {
-        j = detail::to_json_impl(obj);
-    }
+        static void to_json(json& j, const py::object& obj)
+        {
+            j = detail::to_json_impl(obj);
+        }
+    };
 
 }
 
