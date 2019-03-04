@@ -33,7 +33,7 @@ namespace nlohmann
                 double number = j.get<double>();
                 if (number == std::floor(number))
                 {
-                    return py::int_(j.get<int>());
+                    return py::int_(j.get<long>());
                 }
                 else
                 {
