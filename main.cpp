@@ -26,23 +26,21 @@ namespace nlohmann
             }
             if (j.is_boolean())
             {
-                return py::bool_(j.get<bool>());
+                return py::bool_(j.get<nl::json::boolean_t>());
             }
             if (j.is_number())
             {
-                double number = j.get<double>();
-                if (number == std::floor(number))
-                {
-                    return py::int_(j.get<long>());
-                }
-                else
-                {
-                    return py::float_(number);
+                if (j.is_number_float()) {
+                    return py::float_(j.get<nl::json::number_float_t>());
+                } else if (j.is_number_unsigned()) {
+                    return py::int_(j.get<nl::json::number_unsigned_t>());
+                } else {
+                    return py::int_(j.get<nl::json::number_integer_t>());
                 }
             }
             if (j.is_string())
             {
-                return py::str(j.get<std::string>());
+                return py::str(j.get<nl::json::string_t>());
             }
             if (j.is_array())
             {
@@ -72,19 +70,19 @@ namespace nlohmann
             }
             if (py::isinstance<py::bool_>(obj))
             {
-                return obj.cast<bool>();
+                return obj.cast<nl::json::boolean_t>();
             }
             if (py::isinstance<py::int_>(obj))
             {
-                return obj.cast<long>();
+                return obj.cast<nl::json::number_integer_t>();
             }
             if (py::isinstance<py::float_>(obj))
             {
-                return obj.cast<double>();
+                return obj.cast<nl::json::number_float_t>();
             }
             if (py::isinstance<py::str>(obj))
             {
-                return obj.cast<std::string>();
+                return obj.cast<nl::json::string_t>();
             }
             if (py::isinstance<py::tuple>(obj) || py::isinstance<py::list>(obj))
             {
@@ -100,7 +98,7 @@ namespace nlohmann
                 json out;
                 for (py::handle key: obj)
                 {
-                    out[key.cast<std::string>()] = to_json_impl(obj[key]);
+                    out[key.cast<nl::json::string_t>()] = to_json_impl(obj[key]);
                 }
                 return out;
             }
